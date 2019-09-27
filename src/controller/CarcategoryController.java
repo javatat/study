@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  *** 카테고리별 차 검색 ***
  */
-@WebServlet("/CarcategoryController")
+@WebServlet("/CarcategoryController.do")
 public class CarcategoryController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
