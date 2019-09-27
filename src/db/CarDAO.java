@@ -9,6 +9,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import controller.CarListBean;
+
 public class CarDAO {
 
 	//필수 세가지
@@ -37,7 +39,7 @@ public class CarDAO {
 	public Vector<CarListBean> getAllCarlist(){
 		Vector<CarListBean> v = new Vector<CarListBean>();
 		
-		//검색한 차 정보 하나를 저장할 용도의 CarListBean객체를 저장할 변수 선언
+		//검색한 한 개의 차 정보를 저장할 용도의 CarListBean객체를 저장할 변수 선언
 		CarListBean bean = null;
 		
 		try{
@@ -78,4 +80,57 @@ public class CarDAO {
 		
 		return v;
 	}
+
+	public Vector<CarListBean> getCategoryCarList(String carcategory) {
+		
+		Vector<CarListBean> v = new Vector<CarListBean>();
+		
+		//검색한 한 개의 차 정보를 저장할 용도의 CarListBean객체를 저장할 변수 선언
+		CarListBean bean = null;
+		
+		try{
+			//커넥션풀로부터 커넥션 얻기(DB접속)
+			getCon();
+			
+			String sql = "select * from where carcategory=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, carcategory);
+			
+			rs = pstmt.executeQuery();
+			
+			//반복문을 이용하여 각각의 CarListBean객체에 검색한 차량정보를 저장
+			while(rs.next()){
+				bean = new CarListBean();
+				bean.setCarno(rs.getInt(1));//차번호 담기
+				bean.setCarname(rs.getString(2));//차량명 담기
+				bean.setCarcompany(rs.getString(3));//차제조사
+				bean.setCarprice(rs.getInt(4));//차 한대당 가격 담기
+				bean.setCarusepeople(rs.getInt(5));//차인승 정보 담기
+				bean.setCarinfo(rs.getString(6));//차정보 담기
+				bean.setCarimg(rs.getString(7));//차이미지명 담기
+				bean.setCarcategory(rs.getString(8));//차유형(소형,중형,대형)중 하나 담기 
+				
+				//벡터에 CarListBean추가
+				v.add(bean);
+			}
+				con.close();
+				
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		
+		return v;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
